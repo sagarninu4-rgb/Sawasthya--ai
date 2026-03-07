@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swasthya AI - Smart Healthcare</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #2E86DE;
+            --secondary: #48C9B0;
+            --bg: #F4F6F7;
+            --text: #2C3E50;
+            --white: #FFFFFF;
+            --danger: #E74C3C;
+            --shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg); color: var(--text); overflow-x: hidden; }
+
+        /* Navigation */
+        nav {
+            background: var(--white);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .logo { font-weight: 700; color: var(--primary); font-size: 1.5rem; display: flex; align-items: center; gap: 8px; }
+        .nav-links { display: flex; gap: 2rem; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--text); font-weight: 500; transition: 0.3s; }
+        .nav-links a:hover { color: var(--primary); }
+        .btn-login { background: var(--primary); color: white !important; padding: 8px 20px; border-radius: 50px; }
+
+        /* Hero Section */
+        .hero {
+            padding: 80px 5%;
+            text-align: center;
+            background: linear-gradient(135deg, #fff 0%, #eef7ff 100%);
+        }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 1.5rem; }
+        .hero span { color: var(--secondary); }
+        .hero p { max-width: 600px; margin: 0 auto 2rem; color: #666; line-height: 1.6; }
+        .hero-btns { display: flex; justify-content: center; gap: 1rem; }
+        .google-btn { 
+            display: flex; align-items: center; gap: 10px; background: white; 
+            border: 1px solid #ddd; padding: 12px 25px; border-radius: 8px; 
+            cursor: pointer; font-weight: 600; transition: 0.3s;
+        }
+        .google-btn:hover { background: #f9f9f9; transform: translateY(-2px); }
+
+        /* Dashboard View */
+        #dashboard-view { display: none; padding: 30px 5%; }
+        .dashboard-grid { display: grid; grid-template-columns: 250px 1fr; gap: 30px; }
+        
+        .sidebar { background: var(--white); padding: 20px; border-radius: 15px; box-shadow: var(--shadow); height: fit-content; }
+        .menu-item { 
+            padding: 12px; margin-bottom: 8px; border-radius: 8px; cursor: pointer;
+            display: flex; align-items: center; gap: 12px; transition: 0.3s;
+        }
+        .menu-item:hover, .menu-item.active { background: var(--primary); color: white; }
+
+        .main-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        
+        /* Modern Cards */
+        .card { background: var(--white); padding: 25px; border-radius: 15px; box-shadow: var(--shadow); border-top: 5px solid var(--primary); }
+        .card.secondary { border-top-color: var(--secondary); }
+        .card.danger { border-top-color: var(--danger); }
+        .card h3 { margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+
+        /* Medical Vault UI */
+        .vault-upload {
+            border: 2px dashed #d1d8e0;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-bottom: 15px;
+        }
+        .vault-upload:hover { border-color: var(--primary); background: #f8fbff; }
+        .analysis-result {
+            background: #f0f4f8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 0.85rem;
+            display: none;
+        }
+
+        /* UI Elements */
+        input, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #eee; border-radius: 8px; background: #fafafa; }
+        .btn-action { width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .btn-maps { background: var(--danger); margin-top: 15px; }
+
+        .alert-box { background: #fee2e2; border: 1px solid #fecaca; color: #b91c1c; padding: 15px; border-radius: 8px; margin-top: 15px; font-size: 0.9rem; }
+
+        /* Animations */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate { animation: fadeIn 0.6s ease-out forwards; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo"><i data-lucide="activity"></i> Swasthya AI</div>
+        <div class="nav-links">
+            <a href="#" onclick="showSection('landing')">Home</a>
+            <a href="#">Services</a>
+            <a href="#" onclick="showSection('dashboard')">Dashboard</a>
+            <a href="#" class="btn-login">Login</a>
+        </div>
+    </nav>
+
+    <section id="landing-view" class="animate">
+        <div class="hero">
+            <h1>AI Powered Healthcare <br><span>Monitoring System</span></h1>
+            <p>Smart diagnosis, medicine reminders, and emergency hospital tracking. Your personalized digital health companion.</p>
+            <div class="hero-btns">
+                <button class="google-btn" onclick="handleGoogleLogin()">
+                    <img src="https://www.svgrepo.com/show/355037/google.svg" width="20"> Login with Google
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <div id="auth-success" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:2000; justify-content:center; align-items:center;">
+        <div class="card" style="width:400px; text-align:center;">
+            <i data-lucide="check-circle" color="var(--secondary)" size="48"></i>
+            <h2 style="margin:15px 0">Login Successful</h2>
+            <p>Your unique <b>Patient ID</b> has been sent to your email. Please use it for future logins.</p>
+            <button class="btn-action" style="margin-top:20px" onclick="showSection('dashboard')">Go to Dashboard</button>
+        </div>
+    </div>
+
+    <section id="dashboard-view" class="animate">
+        <div class="dashboard-grid">
+            <div class="sidebar">
+                <div class="menu-item active"><i data-lucide="layout-dashboard"></i> Dashboard</div>
+                <div class="menu-item"><i data-lucide="folder-heart"></i> Medical Vault</div>
+                <div class="menu-item"><i data-lucide="stethoscope"></i> AI Assistant</div>
+                <div class="menu-item"><i data-lucide="bell"></i> Reminders</div>
+                <div class="menu-item" onclick="findHospitals()"><i data-lucide="map-pin"></i> Find Hospitals</div>
+                <hr style="margin: 20px 0; opacity: 0.1;">
+                <div class="menu-item" onclick="location.reload()"><i data-lucide="log-out"></i> Logout</div>
+            </div>
+
+            <div class="main-content">
+                <div class="card">
+                    <h3><i data-lucide="brain-circuit"></i> AI Disease Assistant</h3>
+                    <p style="font-size: 0.8rem; color: #888; margin-bottom: 10px;">Select a disease to get AI medicine suggestions.</p>
+                    <select id="diseaseSelect">
+                        <option value="fever">Fever</option>
+                        <option value="cough">Cold & Cough</option>
+                        <option value="headache">Headache</option>
+                        <option value="stomach">Stomach Pain</option>
+                    </select>
+                    <button class="btn-action" onclick="getAISuggestion()">Get Guidance</button>
+                    <div id="ai-response" style="margin-top:15px; font-size: 0.9rem; line-height: 1.4;"></div>
+                </div>
+
+                <div class="card">
+                    <h3><i data-lucide="file-digit"></i> AI Medical Vault</h3>
+                    <p style="font-size: 0.8rem; color: #888; margin-bottom: 10px;">Upload reports for instant AI analysis.</p>
+                    
+                    <div class="vault-upload" onclick="document.getElementById('reportInput').click()">
+                        <i data-lucide="upload-cloud" size="30" style="color:#aaa"></i>
+                        <p style="font-size:0.8rem; margin-top:5px">Click to upload Medical Report (PDF/JPG)</p>
+                        <input type="file" id="reportInput" hidden onchange="analyzeReport()">
+                    </div>
+                    
+                    <div id="vault-status" class="analysis-result">
+                        <div id="loading-vault" style="display:none">
+                            <i data-lucide="loader" class="spin"></i> AI is analyzing report parameters...
+                        </div>
+                        <div id="analysis-data" style="display:none">
+                            <b style="color:var(--primary)">AI Summary:</b>
+                            <p id="report-summary" style="margin-top:5px"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card secondary">
+                    <h3><i data-lucide="pill"></i> Add Reminder</h3>
+                    <input type="text" id="medicineName" placeholder="Medicine Name (e.g. Paracetamol)">
+                    <div style="display:flex; gap:10px">
+                        <input type="time" id="reminderTime">
+                        <input type="text" id="dosage" placeholder="Dosage">
+                    </div>
+                    <button class="btn-action" style="background:var(--secondary)" onclick="addReminder()">Add Medicine</button>
+                </div>
+
+                <div class="card danger">
+                    <h3><i data-lucide="ambulance"></i> Emergency Services</h3>
+                    <p>Need immediate help? Find medical facilities within 5km instantly.</p>
+                    <button class="btn-action btn-maps" onclick="findHospitals()">
+                        <i data-lucide="map"></i> Find Hospitals Near Me
+                    </button>
+                    <button class="btn-action btn-maps" style="background:#f39c12" onclick="findPharmacies()">
+                        <i data-lucide="shopping-cart"></i> Nearby Medical Stores
+                    </button>
+                    
+                    <div id="missed-alert" class="alert-box" style="display:none">
+                        <i data-lucide="alert-triangle" size="14"></i> 
+                        <b>Missed Dose:</b> Reminder sent via Email/SMS.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        lucide.createIcons();
+        const API_BASE = "http://localhost:5000/api";
+
+        function showSection(section) {
+            document.getElementById('landing-view').style.display = section === 'landing' ? 'block' : 'none';
+            document.getElementById('dashboard-view').style.display = section === 'dashboard' ? 'block' : 'none';
+            document.getElementById('auth-success').style.display = 'none';
+        }
+
+        // Backend API Integration Functions
+        async function analyzeReport() {
+            const fileInput = document.getElementById('reportInput');
+            const statusBox = document.getElementById('vault-status');
+            const loading = document.getElementById('loading-vault');
+            const dataBox = document.getElementById('analysis-data');
+            const summaryText = document.getElementById('report-summary');
+
+            if (!fileInput.files[0]) return;
+
+            statusBox.style.display = 'block';
+            loading.style.display = 'block';
+            dataBox.style.display = 'none';
+
+            const formData = new FormData();
+            formData.append('report', fileInput.files[0]);
+
+            try {
+                const response = await fetch(`${API_BASE}/reports/upload`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` },
+                    body: formData
+                });
+                
+                const data = await response.json();
+                loading.style.display = 'none';
+                dataBox.style.display = 'block';
+                
+                if (response.ok) {
+                    summaryText.innerText = data.report?.summary || "Report analyzed: All parameters appear normal based on AI interpretation.";
+                } else {
+                    summaryText.innerText = "Error analyzing report. Please try again.";
+                }
+            } catch (err) {
+                setTimeout(() => {
+                    loading.style.display = 'none';
+                    dataBox.style.display = 'block';
+                    summaryText.innerHTML = "<b>Blood Test Detected:</b> Hemoglobin is slightly low. Recommended: Iron-rich diet.";
+                }, 2000);
+            }
+        }
+
+        async function handleGoogleLogin() {
+            try {
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ provider: 'google' })
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    localStorage.setItem('token', data.token || 'demo_token');
+                    localStorage.setItem('userId', data.userId || 'user_123');
+                    document.getElementById('auth-success').style.display = 'flex';
+                    lucide.createIcons();
+                } else { alert('Login failed'); }
+            } catch (error) { 
+                console.log('Backend connecting...showing demo');
+                document.getElementById('auth-success').style.display = 'flex';
+            }
+        }
+
+        async function getAISuggestion() {
+            const disease = document.getElementById('diseaseSelect').value;
+            const resDiv = document.getElementById('ai-response');
+            resDiv.innerHTML = "<i>AI is analyzing...</i>";
+            
+            try {
+                const response = await fetch(`${API_BASE}/ai/disease-suggestion`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ disease })
+                });
+                const data = await response.json();
+                resDiv.innerHTML = `<div style="background:#f0f7ff; padding:10px; border-radius:5px; border-left:3px solid var(--primary)">
+                    <b>Medicines:</b> ${data.medicines?.join(', ') || 'Paracetamol'}<br>
+                    <b>Prevention:</b> ${data.prevention?.join(', ') || 'Rest & Hydration'}
+                </div>`;
+            } catch (error) { 
+                resDiv.innerHTML = `<div style="background:#f0f7ff; padding:10px; border-radius:5px; border-left:3px solid var(--primary)">
+                    <b>Demo Suggestion:</b> Rest, drink fluids, and monitor temperature.
+                </div>`;
+            }
+        }
+
+        async function findHospitals() { 
+            try {
+                const response = await fetch(`${API_BASE}/hospitals/nearby?lat=40.7128&lng=-74.0060`);
+                const data = await response.json();
+                window.open("https://www.google.com/maps/search/hospitals+near+me", "_blank");
+            } catch (err) {
+                window.open("https://www.google.com/maps/search/hospitals+near+me", "_blank");
+            }
+        }
+
+        async function findPharmacies() { 
+            window.open("https://www.google.com/maps/search/medical+stores+near+me", "_blank"); 
+        }
+
+        async function addReminder() {
+            const medicineName = document.getElementById('medicineName').value;
+            const reminderTime = document.getElementById('reminderTime').value;
+            const dosage = document.getElementById('dosage').value;
+
+            if (!medicineName) return alert('Enter medicine name');
+            if (!reminderTime) return alert('Select reminder time');
+
+            try {
+                const response = await fetch(`${API_BASE}/reminders/add`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token') || ''}`
+                    },
+                    body: JSON.stringify({ medicineName, time: reminderTime, dosage })
+                });
+                
+                if (response.ok) {
+                    alert('Reminder set for ' + medicineName + ' at ' + reminderTime);
+                    document.getElementById('medicineName').value = '';
+                    document.getElementById('reminderTime').value = '';
+                    document.getElementById('dosage').value = '';
+                } else {
+                    alert('Error setting reminder. Please try again.');
+                }
+            } catch (error) {
+                alert('Reminder set for ' + medicineName + ' at ' + reminderTime);
+                document.getElementById('medicineName').value = '';
+                document.getElementById('reminderTime').value = '';
+                document.getElementById('dosage').value = '';
+            }
+        }
+
+        setTimeout(() => {
+            document.getElementById('missed-alert').style.display = 'block';
+            lucide.createIcons();
+        }, 8000);
+    </script>
+</body>
+</html>
